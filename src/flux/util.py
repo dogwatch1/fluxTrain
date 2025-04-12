@@ -165,11 +165,11 @@ class ModelSpec:
 
 configs = {
     "flux-dev": ModelSpec(
-        repo_id="black-forest-labs/FLUX.1-dev",
-        repo_id_ae="black-forest-labs/FLUX.1-dev",
+        repo_id=None,
+        repo_id_ae=None,
         repo_flow="flux1-dev.safetensors",
         repo_ae="ae.safetensors",
-        ckpt_path=os.getenv("FLUX_DEV"),
+        ckpt_path="/home/zyliu/workplace/FLUX.1-dev/flux1-dev.safetensors",
         params=FluxParams(
             in_channels=64,
             vec_in_dim=768,
@@ -184,7 +184,7 @@ configs = {
             qkv_bias=True,
             guidance_embed=True,
         ),
-        ae_path=os.getenv("AE"),
+        ae_path="/home/zyliu/workplace/FLUX.1-dev/ae.safetensors",
         ae_params=AutoEncoderParams(
             resolution=256,
             in_channels=3,
@@ -362,10 +362,12 @@ def load_controlnet(name, device, transformer=None):
 
 def load_t5(device: str | torch.device = "cuda", max_length: int = 512) -> HFEmbedder:
     # max length 64, 128, 256 and 512 should work (if your sequence is short enough)
-    return HFEmbedder("xlabs-ai/xflux_text_encoders", max_length=max_length, torch_dtype=torch.bfloat16).to(device)
+    local_path = "/home/zyliu/workplace/FLUX.1-dev"
+    return HFEmbedder("t5xxl_bf16", max_length=max_length,local_path=local_path, torch_dtype=torch.bfloat16).to(device)
 
 def load_clip(device: str | torch.device = "cuda") -> HFEmbedder:
-    return HFEmbedder("openai/clip-vit-large-patch14", max_length=77, torch_dtype=torch.bfloat16).to(device)
+    local_path = "/home/zyliu/workplace/FLUX.1-dev"
+    return HFEmbedder("text_encoder", max_length=77,local_path=local_path, torch_dtype=torch.bfloat16).to(device)
 
 
 def load_ae(name: str, device: str | torch.device = "cuda", hf_download: bool = True) -> AutoEncoder:

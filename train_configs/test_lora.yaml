@@ -3,7 +3,7 @@ data_config:
   train_batch_size: 1
   num_workers: 4
   img_size: 512
-  img_dir: images/
+  img_dir: /home/zyliu/workplace/x-flux/images/
   random_ratio: true # support multi crop preprocessing
 report_to: wandb
 train_batch_size: 1
@@ -29,8 +29,8 @@ single_blocks: "1,2,3,4"
 double_blocks: null
 disable_sampling: false
 sample_every: 250 # sample every this many steps
-sample_width: 1024
-sample_height: 1024
+sample_width: 512
+sample_height: 512
 sample_steps: 20
 sample_prompts:
     - "woman with red hair, playing chess at the park, bomb going off in the background"

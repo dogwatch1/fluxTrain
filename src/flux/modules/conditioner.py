@@ -4,18 +4,18 @@ from transformers import (CLIPTextModel, CLIPTokenizer, T5EncoderModel,
 
 
 class HFEmbedder(nn.Module):
-    def __init__(self, version: str, max_length: int, **hf_kwargs):
+    def __init__(self,version: str, max_length: int, local_path, **hf_kwargs ):
         super().__init__()
-        self.is_clip = version.startswith("openai")
+        self.is_clip = version.startswith("text_encoder")
         self.max_length = max_length
         self.output_key = "pooler_output" if self.is_clip else "last_hidden_state"
 
         if self.is_clip:
-            self.tokenizer: CLIPTokenizer = CLIPTokenizer.from_pretrained(version, max_length=max_length)
-            self.hf_module: CLIPTextModel = CLIPTextModel.from_pretrained(version, **hf_kwargs)
+            self.tokenizer: T5Tokenizer = CLIPTokenizer.from_pretrained(local_path, max_length=max_length, subfolder="tokenizer")
+            self.hf_module: T5EncoderModel = CLIPTextModel.from_pretrained(local_path,subfolder='text_encoder' , **hf_kwargs)
         else:
-            self.tokenizer: T5Tokenizer = T5Tokenizer.from_pretrained(version, max_length=max_length)
-            self.hf_module: T5EncoderModel = T5EncoderModel.from_pretrained(version, **hf_kwargs)
+            self.tokenizer: T5Tokenizer = T5Tokenizer.from_pretrained(local_path, max_length=max_length, ignore_mismatched_sizes=True, subfolder="tokenizer_2")
+            self.hf_module: T5EncoderModel = T5EncoderModel.from_pretrained(local_path,ignore_mismatched_sizes=True,subfolder='text_encoder_2' , **hf_kwargs)
 
         self.hf_module = self.hf_module.eval().requires_grad_(False)
 

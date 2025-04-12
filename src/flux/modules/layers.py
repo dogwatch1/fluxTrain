@@ -1,3 +1,4 @@
+
 import math
 from dataclasses import dataclass
 
@@ -592,4 +593,3 @@ class ImageProjModel(torch.nn.Module):
         )
         clip_extra_context_tokens = self.norm(clip_extra_context_tokens)
         return clip_extra_context_tokens
-
